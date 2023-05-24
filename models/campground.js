@@ -3,23 +3,22 @@ const Schema = mongoose.Schema;
 const Model =mongoose.model;
 
 const campGroundSchema = new Schema({
-  name: {
+  Name: {
     type: String,
     required: true,
   },
   Title: {
-    type: String,
-    required: true,
+    type: String
   },
-  price: {
+  Price: {
     type: Number,
     required: true,
   },
-  description: {
+  Description: {
     type: String,
     required: true,
   },
-  location: {
+  Location: {
     type: String,
     required: true,
   },

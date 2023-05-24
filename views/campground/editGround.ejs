@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+     <h1>Edit page</h1>
+    <form action="/campground/<%-foundcamp._id%>?_method=PUT" method="post">
+        <label for="productName">Product Name :</label>
+        <input name="Name" id="name" type="text" value="<%=foundcamp.Name%>">
+
+        <label for="price"> Price :</label>
+        <input id="Price" name="Price" type="number" value="<%=foundcamp.Price%>">
+        <br>
+        <br>
+        <label for="description">Category :</label>
+        <textarea id="Description" name="Description"><%=foundcamp.Description%></textarea>
+        <br>
+        <br>
+        <label for="location"> location :</label>
+        <input id="Location" name="Location" value="<%=foundcamp.Location%>">
+        <br>
+        <br>
+        <button>Submit</button>
+    </form>
+</body>
+</html>
