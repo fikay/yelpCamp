@@ -30,6 +30,7 @@ const seedDb = async()=>{
            Price: `${rand}`,
            Description: `${sample(campDescription)}`,
            Location: `${cities[rand].city},${cities[rand].state}`,
+           Image: `https://source.unsplash.com/collection/483251`,
          });
           await seeder.save()
     }

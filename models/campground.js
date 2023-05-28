@@ -8,7 +8,10 @@ const campGroundSchema = new Schema({
     required: true,
   },
   Title: {
-    type: String
+    type: String,
+  },
+  Image: {
+    type: String,
   },
   Price: {
     type: Number,
@@ -22,6 +25,12 @@ const campGroundSchema = new Schema({
     type: String,
     required: true,
   },
+  Reviews: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "reviewModel",
+    },
+  ],
 });
 
 const campGround = Model('campGround', campGroundSchema)

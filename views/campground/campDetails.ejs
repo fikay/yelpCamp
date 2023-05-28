@@ -1,26 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campground Details</title>
-</head>
-<body>
-    <h1><%=findCamp.Name%></h1>
-     <ul>
-        <li id="title"><label>Title: </label><%= findCamp.Title%></li>
-        <Li><label>Price: </label><%=findCamp.Price%> dollars</Li>
-        <li><label>Description: </label><%=findCamp.Description%></li>
-        <li><label>Location:  </label><%=findCamp.Location%></li>
-     </ul>
+<% layout('./layouts/boilerPlate') %>
+<div class="card mb-3">
+    <img class="img-fluid" src="<%= findCamp.Image %>">
+     <div class="card-body">
+        <h5 class="card-title"><%= findCamp.Name %></h5>
+        <p class="card-text"><%= findCamp.Description %></p>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item"><%= findCamp.Location %></li>
+        <li class="list-group-item">$<%= findCamp.Price %>/night</li>
+    </ul>
+    <div class="card-body">
+        <a class="card-link btn btn-info" href="/campground/<%-findCamp._id%>/edit"" >Edit Campground</a>
+         <form class="d-inline"action="/campground/<%-findCamp._id%>?_method=DELETE" method="post" >
+            <button class="card-link btn btn-danger">Delete Campground</button>
+        </form>
+        
+    </div>
+</div>
 
-      <a href="/campground/<%-findCamp._id%>/edit">Edit Campground</a>
-      <br>
-      <br>
-      <form action="/campground/<%-findCamp._id%>?_method=DELETE" method="post" >
-       <button>Delete Campground</button>
-      </form>
-      
-</body>
-</html>
+<h2>ADD REVIEW</h2>
+<form class="needs-validation" action="/campground/<%=findCamp._id %>/review" method="post" novalidate>
+ <div class="mb-3">
+        <div class="mb-3">
+            <label class="fw-bold" for="price" class="form-label">Rating</label>
+            <input class="form-range" type="range" name="Rating" min="0" max="5">
+            <div class="invalid-feedback">
+                Price cannot be empty
+            </div>
+            <!-- <div class="valid-feedback">
+                Looks Good
+            </div> -->
+        </div>
+        <div class="mb-3 ">
+             <label class="fw-bold" for="description" class="form-label">Review</label>
+            <textarea class="form-control" id="description" name="Body" required></textarea>
+            <div class="invalid-feedback">
+                Review cannot be empty
+            </div>
+            <!-- <div class="valid-feedback">
+                Looks Good
+            </div> -->
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+</form>
