@@ -110,12 +110,25 @@ app.put('/campground/:id', wrapAsync( async (req,res, next)=>{
  app.get('/campground/:id*', wrapAsync( async (req, res, next)=>{
     const {id} = req.params
     
-       const findCamp = await campGround.findById(id);
+       const findCamp = await campGround.findById(id).populate("Reviews");
+       //console.log(findCamp.Reviews)
+       const reviews = findCamp.Reviews;
        //Handle error if camp not found
         if (!findCamp) {
           throw new appError("Camp not found", 404);
         }
-       res.render("campground/campDetails", { findCamp }); 
+       res.render("campground/campDetails", { findCamp,reviews }); 
+ }))
+
+ //ROUTE TO DELETE REVIEWS
+ app.delete('/campground/:id/reviews/:reviewId',wrapAsync( async (req,res)=>{
+  const {id, reviewId} = req.params
+ // console.log(reviewId)
+  const rev = await review.findById(reviewId)
+  //console.log(rev);
+   await campGround.findByIdAndUpdate(id, {$pull:{Reviews:reviewId}})
+    await review.findByIdAndDelete(reviewId);
+  res.redirect(`/campground/${id}`)
  }))
 
 //route to post new campground
@@ -147,7 +160,7 @@ app.post('/campground',wrapAsync( async (req,res, next)=>{
 }))
 
 
-//ROUTE TO DELETE GROUNDS
+//ROUTE TO DELETE CAMPGROUNDS
 app.delete('/campground/:id', wrapAsync( async (req,res)=>{
     const {id} =  req.params
      await campGround.findByIdAndDelete(id, req.body )
