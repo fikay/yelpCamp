@@ -1,9 +1,16 @@
 const joi = require('joi')
 const schema = joi.object({
-  Name: joi.string().alphanum().min(3).max(30).required(),
+  Name: joi
+    .string()
+    .alphanum()
+    .min(3)
+    .max(30)
+    .required(),
   Price: joi.number().min(0).required(),
-  Description: joi.string().alphanum().required(),
-  Image:joi.string().required(),
+  Description: joi
+    .string()
+    .required(),
+  Image: joi.string().required(),
   Location: joi.string().alphanum().required(),
 });
 
