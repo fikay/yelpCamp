@@ -6,6 +6,7 @@ const appError = require("../utilities/appError");
 const campGround = require("../models/campground");
 const review = require("../models/review");
 
+
 //route for HOMEPAGE
 router.get(
   "/",
@@ -47,7 +48,12 @@ router.put(
     if (!updateFoundcamp) {
       throw new appError("Camp not found", 404);
     }
-    res.redirect(`/campground/${updateFoundcamp._id}`);
+    else
+    {
+      req.flash('success', 'Camp Updated successfully')
+      res.redirect(`/campground/${updateFoundcamp._id}`);
+    }
+    
   })
 );
 
@@ -56,9 +62,7 @@ router.get(
   "/:id*",
   wrapAsync(async (req, res, next) => {
     const { id } = req.params;
-
     const findCamp = await campGround.findById(id).populate("Reviews");
-    //console.log(findCamp.Reviews)
     const reviews = findCamp.Reviews;
     //Handle error if camp not found
     if (!findCamp) {
@@ -76,22 +80,26 @@ router.post(
   wrapAsync(async (req, res, next) => {
     const { error } = schema.validate(req.body, { abortEarly: false });
     if (error) {
-      //console.log(error.details)
-      const details = error.details.map((e, d) => e.message);
-      //  const{Name} = details
-      console.log(details);
-      throw new appError(details, 400);
-      //res.render("campground/newCampground", {details})
+      // const details = error.details.map((e) => e.message);
+      // console.log(details);
+      //throw new appError(details, 400);
+      req.flash('failed', 'Form Validation error');
+      //res.redirect('/campground/newCampground')
+      res.redirect("/campground/new")
     } else {
+      
       const newGround = new campGround(req.body);
       await newGround
         .save()
         .then(async () => {
+          req.flash('success', 'Campground created successfully')
           res.redirect("/campground");
         })
         .catch((err) => {
+          req.flash('failed', 'Campground was not created ')
+          res.redirect("/campground");
           //throw new appError('Missing fields', 401)
-          next(err);
+          //next(err);
         });
     }
   })
@@ -102,8 +110,16 @@ router.delete(
   "/:id",
   wrapAsync(async (req, res) => {
     const { id } = req.params;
-    await campGround.findByIdAndDelete(id, req.body);
-    res.redirect("/campground");
+    await campGround.findByIdAndDelete(id, req.body)
+    .then(()=>{
+      req.flash("success", "Campground deleted successfully");
+      res.redirect("/campground");
+    })
+    .catch(err=>{
+      req.flash("failed", "Campground was not Found ");
+      res.redirect("/campground");
+    })
+    
   })
 );
 

@@ -1,7 +1,12 @@
 <% layout('./layouts/boilerPlate') %>
+<style>
+    #card{
+        overflow: hidden;
+    }
+</style>
 <div class="row">
     <div class="col-8">
-        <div class="card mb-3">
+        <div class="card mb-3 rounded-4">
                 <img class="img-fluid" src="<%= findCamp.Image %>">
                 <div class="card-body">
                     <h5 class="card-title"><%= findCamp.Name %></h5>
@@ -40,19 +45,43 @@
     <div class="col-4  ">
         <div class="row  align-items-center">
             <div class="col-md-12 ">
-                <% if (reviews.length === 0) { %>   
-                    <div class="border border-danger">
-                        <p>NO REVIEWS</p>
-                    </div>
-                <% } else { %>
+                    <% if (reviews.length === 0) { %>   
+                        <div class="card border border-light text-center">
+                            <p class="fs-3">NO REVIEWS</p>
+                        </div>
+                    <% } else { %>
                     <% for( let rev of  reviews) { %>
-                    <div class=" card border mb-2">
-                         <p>Review: <%= rev.Body %></p>
-                        <p>Rating: <%= rev.Rating %></p>
-                        <form class="d-inline align-self-end" action="/campground/<%-findCamp._id%>/reviews/<%-rev.id%>?_method=DELETE" method="post" >
-                            <button class="btn btn-danger">Delete Review</button>
-                        </form>
-                    </div>
+                        <div class=" card border mb-2 rounded-4">
+                            <p class="ms-2 mt-2 fs-5"><%= rev.Body %></p>
+                            <p class="text-end me-2">Rating: <%= rev.Rating %></p>
+                            <div class="row ms-5">
+                                <div class="col-md-4  ">
+                                    <button class="btn btn-light">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                 <div class="col-md-4  ">
+                                    <button class="btn btn-light">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-quote" viewBox="0 0 16 16">
+                                        <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                        <path d="M7.066 4.76A1.665 1.665 0 0 0 4 5.668a1.667 1.667 0 0 0 2.561 1.406c-.131.389-.375.804-.777 1.22a.417.417 0 1 0 .6.58c1.486-1.54 1.293-3.214.682-4.112zm4 0A1.665 1.665 0 0 0 8 5.668a1.667 1.667 0 0 0 2.561 1.406c-.131.389-.375.804-.777 1.22a.417.417 0 1 0 .6.58c1.486-1.54 1.293-3.214.682-4.112z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="col-md-4   ">
+                                      <form class="d-inline align-self-end" action="/campground/<%-findCamp._id%>/reviews/<%-rev.id%>?_method=DELETE" method="post" >
+                                        <button class="btn btn-light ">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                                            </svg>
+                                        </button>                   
+                                     </form>
+                                </div>  
+                            </div>
+                           
+                        </div>
                     <% } %>
                  <% } %>
                 

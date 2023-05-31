@@ -19,5 +19,16 @@ const reviewSchema = joi.object({
   Rating: joi.number().min(0).required(),
   Body: joi.string().required(),
 });
+
+const userSchema = joi.object({
+  Name: joi.string().min(3).required(),
+  Password: joi.string().pattern(new RegExp("^[a-zA-Z0-9]{8,30}$")).required(),
+  Email: joi
+    .string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } }).required(),
+});
+
+
 module.exports.schema = schema
 module.exports.reviewSchema =reviewSchema
+module.exports.userSchema = userSchema

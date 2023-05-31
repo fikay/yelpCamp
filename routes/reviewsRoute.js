@@ -6,7 +6,7 @@ const appError = require("../utilities/appError");
 const campGround = require("../models/campground");
 const review = require("../models/review");
 
-// ROUTE FOR Camp Review
+// ROUTE FOR adding Camp Review
 router.post("/", async (req, res, next) => {
   const { error } = reviewSchema.validate(req.body);
   if (error) {
@@ -19,6 +19,7 @@ router.post("/", async (req, res, next) => {
     camp.Reviews.push(reviewBody);
     await reviewBody.save();
     await camp.save();
+    req.flash("success", 'Review added to campground')
     res.redirect(`/campground/${camp.id}`);
   }
 });
@@ -33,6 +34,7 @@ router.delete(
     //console.log(rev);
     await campGround.findByIdAndUpdate(id, { $pull: { Reviews: reviewId } });
     await review.findByIdAndDelete(reviewId);
+    req.flash("success", "Review deleted from campground");
     res.redirect(`/campground/${id}`);
   })
 );

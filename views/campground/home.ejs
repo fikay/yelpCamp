@@ -1,28 +1,31 @@
 <% layout('./layouts/boilerPlate') %>
-    <h1>All Campgrounds</h1>
+<div class="row ">
+    <div class="col-8 offset-2">
+        <h1>All Campgrounds</h1>
     <a href="/campground/new">New Camp</a>
-    <style>
-        img{
-            overflow: hidden;
-            height: 160px;
-            
-        }
-    </style>
+    
         <% for( let camp of campgrounds ) { %>
-            <div class="card border border-warning" >
-                <div class="row" style="height: 10rem;">
-                    <div class="col-md-4">
-                        <img class="img-fluid" src="<%= camp.Image %>">
+            <div class="card border border-success mb-3 " >
+                <div id="container" class="row" style="height: 10rem;">
+                    <div class=" col-md-4 "style="height: 160px;">
+                        <img class=" h-100 img-fluid" src="<%= camp.Image %>">
                     </div>
-                    <div class="col-md-8">
-                           <h5 class="card-title"><%= camp.Name %></h5>
-                            <p class="card-text"><%= camp.Description %></p>
-                            <a href="/campground/<%= camp._id %>" class="btn btn-primary">Camp Details</a>
+                    <div class=" col-md-4 ">
+                           <h5 class="card-title text-end me-3"><%= camp.Name %></h5>
+                            <p class="card-text text-end me-3"><%= camp.Description %></p>
+                            
+                    </div>
+                    <div id ="box" class="col-md-4 d-flex align-items-center justify-content-end ">
+                        <a  href="/campground/<%= camp._id %>" class="btn btn-primary m">Camp Details</a>
                     </div>
                 </div>
 
             </div>
         <% } %>
    
+    </div>
 
+</div>
     
+
+   

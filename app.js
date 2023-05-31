@@ -8,7 +8,14 @@ const appError = require('./utilities/appError')
 const mongoose =  require('mongoose')
 const campgroundRoutes = require('./routes/campgroundRoutes')
 const reviewsRoute = require('./routes/reviewsRoute')
-const cookieParser = require('cookie-parser')
+const registerRoutes = require('./routes/register')
+const loginRoute = require('./routes/login')
+//const cookieParser = require('cookie-parser')
+const session = require('express-session')
+const flash = require('connect-flash')
+const passport = require("passport");
+const localStrategy = require('passport-local')
+const user = require('./models/user')
 
 
 
@@ -39,12 +46,47 @@ app.use(methodOverride('_method'))
 // using morgan middleware
 app.use(morgan('tiny'))
 
-// middleware to get routes with /campground and Reviews
-app.use('/campground', campgroundRoutes)
+//middleware for sessions
+const sessionConfig = {
+  secret: "Fik@yo123",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly:true,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    maxAge: 1000 * 60 * 60 * 24 * 7
+  },
+};
+app.use(session(sessionConfig));
+
+//Middleware for flash
+app.use(flash())
+app.use((req,res,next)=>{
+  res.locals.success = req.flash('success')
+  res.locals.failed = req.flash('failed')
+  next();
+})
+
+app.use('/login', loginRoute)
+app.use("/register", registerRoutes);
+app.use("/campground", campgroundRoutes);
+//Middleware for passport
+app.use(passport.authenticate())
+app.use(passport.session())
+passport.use(new localStrategy(user.authenticate()))
+
+passport.serializeUser(user.serializeUser())
+passport.deserializeUser(user.deserializeUser())
+
+// middleware to get routes with /campground,Reviews and register
+
 app.use("/campground/:id/reviews", reviewsRoute);
 
+
 //middleware  to parse cookies
-app.use(cookieParser());
+//app.use(cookieParser());
+
+
 
 //Listener for server
 app.listen(3000, ()=>{
