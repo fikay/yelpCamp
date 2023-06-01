@@ -26,12 +26,16 @@ const campGroundSchema = new Schema({
     type: String,
     required: true,
   },
+  author:{
+    type:Schema.Types.ObjectId,
+    ref:'user'
+  },
   Reviews: [
     {
       type: Schema.Types.ObjectId,
       ref: "reviewModel",
-    },
-  ],
+    }
+  ]
 });
 
 campGroundSchema.post('findOneAndDelete', async function(data){

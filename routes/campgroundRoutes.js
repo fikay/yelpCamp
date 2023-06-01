@@ -2,126 +2,32 @@ const express = require('express');
 const router = express.Router()
 const { schema, reviewSchema } = require("../utilities/schemaValidator");
 const wrapAsync = require("../utilities/errorcatch");
-const appError = require("../utilities/appError");
-const campGround = require("../models/campground");
-const review = require("../models/review");
-
+const { loggedIn } = require("../middleware/isLoggedin");
+const{isOwner} = require("../middleware/isOwner")
+const campground = require('../controllers/campground')
 
 //route for HOMEPAGE
-router.get(
-  "/",
-  wrapAsync(async (req, res, next) => {
-    const campgrounds = await campGround.find({});
-    res.render("campground/home", { campgrounds });
-  })
-);
+router.route('/')
+    .get(  wrapAsync(campground.index))
+    .post( wrapAsync(campground.createNewCamp));
 
 // ROUTE FOR NEW CAMPGROUND FORM
-router.get("/new", (req, res) => {
-  res.render("campground/newCampground");
-});
+//prerequisite - User must be logged in
+router.get("/new", loggedIn, campground.newCamp);
 
-//route to edit campground
-router.get(
-  "/:id/edit",
-  wrapAsync(async (req, res, next) => {
-    const { id } = req.params;
-    const foundcamp = await campGround.findById(id);
-    if (!foundcamp) {
-      throw new appError("Camp not found", 404);
-    }
-    res.render("campground/editGround", { foundcamp });
-  })
-);
-
-
-
-//Route to edit campground details
-router.put(
-  "/:id",
-  wrapAsync(async (req, res, next) => {
-    const { id } = req.params;
-    const updateFoundcamp = await campGround.findByIdAndUpdate(id, req.body, {
-      runValidators: true,
-      new: true,
-    });
-    if (!updateFoundcamp) {
-      throw new appError("Camp not found", 404);
-    }
-    else
-    {
-      req.flash('success', 'Camp Updated successfully')
-      res.redirect(`/campground/${updateFoundcamp._id}`);
-    }
-    
-  })
-);
+//route to edit campground details
+//prerequisite - User must be logged in and must be the creator of the camp site
+router.get( "/:id/edit", loggedIn,isOwner,wrapAsync(campground.campDetails));
 
 //route to show campground details
-router.get(
-  "/:id*",
-  wrapAsync(async (req, res, next) => {
-    const { id } = req.params;
-    const findCamp = await campGround.findById(id).populate("Reviews");
-    const reviews = findCamp.Reviews;
-    //Handle error if camp not found
-    if (!findCamp) {
-      throw new appError("Camp not found", 404);
-    }
-    res.render("campground/campDetails", { findCamp, reviews });
-  })
-);
-
-
-
-//route to post new campground
-router.post(
-  "/",
-  wrapAsync(async (req, res, next) => {
-    const { error } = schema.validate(req.body, { abortEarly: false });
-    if (error) {
-      // const details = error.details.map((e) => e.message);
-      // console.log(details);
-      //throw new appError(details, 400);
-      req.flash('failed', 'Form Validation error');
-      //res.redirect('/campground/newCampground')
-      res.redirect("/campground/new")
-    } else {
-      
-      const newGround = new campGround(req.body);
-      await newGround
-        .save()
-        .then(async () => {
-          req.flash('success', 'Campground created successfully')
-          res.redirect("/campground");
-        })
-        .catch((err) => {
-          req.flash('failed', 'Campground was not created ')
-          res.redirect("/campground");
-          //throw new appError('Missing fields', 401)
-          //next(err);
-        });
-    }
-  })
-);
-
+//Route to edit campground details :-prerequisite - User must be logged in and must be the creator of the camp site
 //ROUTE TO DELETE CAMPGROUNDS
-router.delete(
-  "/:id",
-  wrapAsync(async (req, res) => {
-    const { id } = req.params;
-    await campGround.findByIdAndDelete(id, req.body)
-    .then(()=>{
-      req.flash("success", "Campground deleted successfully");
-      res.redirect("/campground");
-    })
-    .catch(err=>{
-      req.flash("failed", "Campground was not Found ");
-      res.redirect("/campground");
-    })
-    
-  })
-);
+router.route("/:id")
+  .get( wrapAsync(campground.details))
+  .put(loggedIn, isOwner, wrapAsync(campground.editcampDetails))
+  .delete(loggedIn, isOwner, wrapAsync(campground.deletion));
+
+
 
 
 module.exports = router;

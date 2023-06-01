@@ -10,6 +10,7 @@ const campgroundRoutes = require('./routes/campgroundRoutes')
 const reviewsRoute = require('./routes/reviewsRoute')
 const registerRoutes = require('./routes/register')
 const loginRoute = require('./routes/login')
+const logoutroute = require('./routes/logout')
 //const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const flash = require('connect-flash')
@@ -61,27 +62,32 @@ app.use(session(sessionConfig));
 
 //Middleware for flash
 app.use(flash())
-app.use((req,res,next)=>{
-  res.locals.success = req.flash('success')
-  res.locals.failed = req.flash('failed')
-  next();
-})
 
-app.use('/login', loginRoute)
-app.use("/register", registerRoutes);
-app.use("/campground", campgroundRoutes);
 //Middleware for passport
-app.use(passport.authenticate())
+app.use(passport.initialize())
 app.use(passport.session())
 passport.use(new localStrategy(user.authenticate()))
 
 passport.serializeUser(user.serializeUser())
 passport.deserializeUser(user.deserializeUser())
 
+app.use((req,res,next)=>{
+  //console.log(req.session)
+  //res.locals.returnTo = req.session.returnTo
+  res.locals.currentUser = req.user;
+  res.locals.success = req.flash('success')
+  res.locals.failed = req.flash('error')
+   
+  next();
+})
+
+
 // middleware to get routes with /campground,Reviews and register
-
+app.use("/login", loginRoute);
 app.use("/campground/:id/reviews", reviewsRoute);
-
+app.use("/register", registerRoutes);
+app.use("/campground", campgroundRoutes);
+app.use("/logout", logoutroute);
 
 //middleware  to parse cookies
 //app.use(cookieParser());

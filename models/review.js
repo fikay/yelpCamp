@@ -7,6 +7,10 @@ const reviewSchema = mongoose.Schema({
     },
     Body:{
         type:String
+    },
+    author:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'user'
     }
 })
 

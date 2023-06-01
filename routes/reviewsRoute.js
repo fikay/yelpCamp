@@ -2,42 +2,23 @@ const express = require("express");
 const router = express.Router({mergeParams:true});
 const { reviewSchema } = require("../utilities/schemaValidator");
 const wrapAsync = require("../utilities/errorcatch");
-const appError = require("../utilities/appError");
-const campGround = require("../models/campground");
-const review = require("../models/review");
+const {loggedIn} = require('../middleware/isLoggedin')
+const { notOwner,isreviewOwner } = require("../middleware/isOwner");
+const Review = require('../controllers/review')
 
 // ROUTE FOR adding Camp Review
-router.post("/", async (req, res, next) => {
-  const { error } = reviewSchema.validate(req.body);
-  if (error) {
-    next(new appError(`${error.message}`, 400));
-  } else {
-     const { id } = req.params;
-     console.log(id)
-    const camp = await campGround.findById(id);
-    const reviewBody = new review(req.body);
-    camp.Reviews.push(reviewBody);
-    await reviewBody.save();
-    await camp.save();
-    req.flash("success", 'Review added to campground')
-    res.redirect(`/campground/${camp.id}`);
-  }
-});
+//prerequisite: 
+//Check if user is logged in - if no, redirect to login page
+//Check if user is owner of the Campground - if yes, stop from posting review
+// if checks are passed post review
+router.post("/", loggedIn, notOwner,Review.addReview );
 
 //ROUTE TO DELETE REVIEWS
-router.delete(
-  "/:reviewId",
-  wrapAsync(async (req, res) => {
-    const { id, reviewId } = req.params;
-    // console.log(reviewId)
-    const rev = await review.findById(reviewId);
-    //console.log(rev);
-    await campGround.findByIdAndUpdate(id, { $pull: { Reviews: reviewId } });
-    await review.findByIdAndDelete(reviewId);
-    req.flash("success", "Review deleted from campground");
-    res.redirect(`/campground/${id}`);
-  })
-);
+//prerequisite: 
+//Check if user is logged in - if no, redirect to login page
+//Check if user is owner of the review - if yes, stop from deleting review
+// if checks are passed post review
+router.delete( "/:reviewId", loggedIn,isreviewOwner,wrapAsync(Review.deletion));
 
 
 module.exports = router

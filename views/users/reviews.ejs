@@ -1,0 +1,42 @@
+<%layout('./layouts/boilerPlate') %>
+<div class="row">
+    <div class="col-12">
+        <% if (!userReviews) { %>
+            <P class="text-center fw-bold">NO REVIEWS</P>
+        <% } else { %>
+         
+         <% for( let rev of userReviews ) { %>
+              <div class="row border mb-2 rounded-4 mx-2 ">
+                <div class="col-4">
+                   <img class="img-fluid rounded-circle" src="https://images.unsplash.com/photo-1674574124649-778f9afc0e9c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHw2fHx8ZW58MHx8fHx8&auto=format&fit=crop&w=500&q=60"  alt="...">
+                </div>
+                <div class="col-8">
+                     <div class=" card border-0">
+                            <p class="ms-2 mt-2 fs-5 text-center"><%= rev.Body %></p>
+                            <p class=" me-2 text-start">Rating: <%= rev.Rating %></p>
+                            <div class="row ms-5">      
+                                <div class="col-md-4 offset-10  ">
+                                      <form class="d-inline align-self-end" action="/campground/reviews/<%-rev.id%>?_method=DELETE" method="post" >
+                                        <button class="btn btn-light ">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                                            </svg>
+                                        </button>                   
+                                     </form>
+                                </div>  
+                            </div>                  
+                </div>
+                </div>
+
+              </div>
+         <% } %>
+            
+        <% } %>
+
+    </div>
+</div>
+<style>
+    .card{
+        height: 100%;
+    }
+</style>

@@ -29,6 +29,7 @@ const seedDb = async()=>{
            Title: "CampGround",
            Price: `${rand}`,
            Description: `${sample(campDescription)}`,
+           author: '647630dba624f05a578e511f',
            Location: `${cities[rand].city},${cities[rand].state}`,
            Image: `https://source.unsplash.com/collection/483251`,
          });

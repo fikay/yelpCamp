@@ -15,21 +15,26 @@
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item"><%= findCamp.Location %></li>
                     <li class="list-group-item">$<%= findCamp.Price %>/night</li>
+                    <li class="list-group-item"> Owner: <%= findCamp.author.username.toUpperCase() %></li>
                 </ul>
-                <div class="card-body">
-                    <a class="card-link btn btn-info" href="/campground/<%-findCamp._id%>/edit"" >Edit Campground</a>
+                <% if (currentUser && currentUser.id === findCamp.author.id) { %>
+                     <div id="checker" class="card-body">
+                    <a id="edit"class="card-link btn btn-info " href="/campground/<%-findCamp._id%>/edit"> Edit Campground</a>
                     <form class="d-inline"action="/campground/<%-findCamp._id%>?_method=DELETE" method="post" >
-                        <button class="card-link btn btn-danger">Delete Campground</button>
+                        <button id="delete"class="card-link btn btn-danger ">Delete Campground</button>
                     </form>
                  </div>
+                <% } %>
+               
         </div>
-         <h2>ADD REVIEW</h2>
+        <% if (currentUser) { %>
+            <h2>ADD REVIEW</h2>
             <form class="needs-validation mb-3" action="/campground/<%=findCamp._id %>/reviews" method="post" novalidate>
                 <div class="mb-3">
                     <label class="fw-bold" for="price" class="form-label">Rating</label>
                         <input class="form-range" type="range" name="Rating" min="0" max="5">
                         <div class="invalid-feedback">
-                            Price cannot be empty
+                            Rating cannot be empty
                         </div>
                 </div>
                 <div class="mb-3">
@@ -41,6 +46,8 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+        <% } %>
+         
     </div>
     <div class="col-4  ">
         <div class="row  align-items-center">
@@ -54,6 +61,7 @@
                         <div class=" card border mb-2 rounded-4">
                             <p class="ms-2 mt-2 fs-5"><%= rev.Body %></p>
                             <p class="text-end me-2">Rating: <%= rev.Rating %></p>
+                            <p class="text-end me-2">Owner: <%= rev.author.username %></p>
                             <div class="row ms-5">
                                 <div class="col-md-4  ">
                                     <button class="btn btn-light">
@@ -71,13 +79,15 @@
                                     </button>
                                 </div>
                                 <div class="col-md-4   ">
-                                      <form class="d-inline align-self-end" action="/campground/<%-findCamp._id%>/reviews/<%-rev.id%>?_method=DELETE" method="post" >
+                                    
+                                       <form class="d-inline align-self-end" action="/campground/<%-findCamp._id%>/reviews/<%-rev.id%>?_method=DELETE" method="post" >
                                         <button class="btn btn-light ">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                                             <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
                                             </svg>
                                         </button>                   
                                      </form>
+                                    
                                 </div>  
                             </div>
                            
@@ -92,3 +102,20 @@
 </div>
 
 
+<!-- <script>
+    const edit = document.querySelector('#edit')
+    const checket = document.querySelector('#checker')
+    console.dir(checket)
+    checket.addEventListener('onmouseover', showTip)
+    if(edit.classList.contains('disabled'))
+    {
+        
+        
+    }
+
+function showTip()
+{
+    console.log('here')
+
+}
+    
