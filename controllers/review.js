@@ -2,12 +2,17 @@ const campGround = require("../models/campground");
 const review = require("../models/review");
 const user = require("../models/user");
 const appError = require("../utilities/appError");
+const { schema, reviewSchema } = require("../utilities/schemaValidator");
 const control = module.exports
 
 control.addReview = async (req, res, next) => {
+ 
   const { error } = reviewSchema.validate(req.body);
   if (error) {
-    next(new appError(`${error.message}`, 400));
+    //next(new appError(`${error.message}`, 400));
+     const { id } = req.params;
+      req.flash("error", `${error.message}`)
+      res.redirect(`/campground/${id}`)
   } else {
      const { id } = req.params;
     const camp = await campGround.findById(id);
