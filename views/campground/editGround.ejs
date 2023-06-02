@@ -1,7 +1,7 @@
 <% layout('./layouts/boilerPlate') %>
      <h1 class="text-center">Edit Campground</h1>
      <div class="col-6 offset-3">
-        <form class="needs-validation" action="/campground/<%-foundcamp._id%>?_method=PUT" method="post" novalidate> 
+        <form class="needs-validation" action="/campground/<%-foundcamp._id%>?_method=PUT" method="post" enctype="multipart/form-data" novalidate> 
         <div class="mb-3">
             <label class="fw-bold" for="name" class="form-label">Camp Name</label>
             <input type="text" class="form-control" id="name" name="Name" value="<%=foundcamp.Name%>" required>
@@ -14,7 +14,7 @@
         </div>
         <div class="mb-3">
             <label class="fw-bold" for="location" class="form-label">Location</label>
-            <input type="text" class="form-control" id="location" name="Location" value="<%=foundcamp.Location%>" required>
+            <input type="text" class="form-control" id="location" name="Location" value="<%=foundcamp.Location%>">
             <div class="valid-feedback">
                 Looks Good
             </div>
@@ -24,7 +24,7 @@
         </div>
         <div class="mb-3">
             <label class="fw-bold" for="image" class="form-label">Image url</label>
-            <input type="text" class="form-control" id="image" name="Image" value="<%=foundcamp.Image%>" required>
+            <input type="file" class="form-control" id="image" name="Images" value="" multiple required>
             <div class="invalid-feedback">
                 Image cannot be empty
             </div>
@@ -55,7 +55,22 @@
                 Looks Good
             </div>
         </div>
+        <div class="mb-3" id="image-preview">
+            <p class="fs-4">check to delete Images</p>
+            <% for( let img of foundcamp.Images ) { %>
+                <input class="form-check-input" type="checkbox" value="<%= img.filename %>" id="flexCheckChecked" name="delete[]" >
+                <img src="<%= img.url %>">
+            <% } %>
+        </div>
+
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
      </div>
     
+<style>
+    #image-preview img{
+        height: 100px;
+        width: 100px;
+        border-radius: 5px;
+    }
+</style>

@@ -1,3 +1,7 @@
+if(process.env.NODE_ENV !== "production")
+{
+  require("dotenv").config();
+}
 const express = require('express')
 const app = express()
 const path = require('path')
@@ -49,13 +53,13 @@ app.use(morgan('tiny'))
 
 //middleware for sessions
 const sessionConfig = {
-  secret: "Fik@yo123",
+  secret: process.env.sessionSecret,
   resave: false,
   saveUninitialized: true,
   cookie: {
-    httpOnly:true,
+    httpOnly: true,
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-    maxAge: 1000 * 60 * 60 * 24 * 7
+    maxAge: 1000 * 60 * 60 * 24 * 7,
   },
 };
 app.use(session(sessionConfig));

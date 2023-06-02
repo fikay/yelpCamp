@@ -1,5 +1,6 @@
 const campGround = require("../models/campground");
 const appError = require("../utilities/appError");
+const {cloudinary} = require('../cloudinary/cloudinaryConfig')
 const { schema, reviewSchema } = require("../utilities/schemaValidator");
 const control = module.exports
 
@@ -48,23 +49,44 @@ control.campDetails = async (req, res, next) => {
 //controller to push changes to camp details
 control.editcampDetails = async (req, res, next) => {
   const { id } = req.params;
-  const updateFoundcamp = await campGround
-    .findByIdAndUpdate(id, req.body, {
-      runValidators: true,
-      new: true,
-    })
-    .populate("author");
-  if (updateFoundcamp.author.id !== req.user.id) {
-    req.flash("error", "You are not the author of the campground");
-    res.redirect("/campground");
-  } else {
-    if (!updateFoundcamp) {
-      throw new appError("Camp not found", 404);
-    } else {
-      req.flash("success", "Camp Updated successfully");
-      res.redirect(`/campground/${updateFoundcamp._id}`);
-    }
-  }
+ 
+  //   console.log(req.files);
+  
+    
+  const findCamp = await campGround.findById(id)
+   if (!findCamp) {
+     req.flash('error', 'Camp not found')
+     res,redirect('/campground')
+   } else {
+     const updateFoundcamp = await campGround
+       .findByIdAndUpdate(id, req.body, {
+         runValidators: true,
+         new: true,
+       })
+       .populate("author");
+       console.log(req.files)
+       const images = req.files.map((f) => ({
+         url: f.path,
+         filename: f.filename,
+       }));
+       updateFoundcamp.Images.push(...images)  
+       await updateFoundcamp.save();
+        if (req.body.delete) {
+          for(let filename of req.body.delete)
+          {
+            await cloudinary.uploader.destroy(filename)
+          }
+          await updateFoundcamp.updateOne({
+            $pull: { Images: { filename: { $in: req.body.delete } } },
+          });
+        }
+     req.flash("success", "Camp Updated successfully");
+     res.redirect(`/campground/${updateFoundcamp._id}`);
+   }
+ 
+ 
+   
+  
 };
 
 //controller to create new campground
@@ -76,6 +98,8 @@ control.createNewCamp = async (req, res, next) => {
   } else {
     const newGround = new campGround(req.body);
     newGround.author = req.user._id;
+    newGround.Images =req.files.map(f=>({url:f.path, filename:f.filename} ))
+    console.log(newGround)
     await newGround
       .save()
       .then(async () => {

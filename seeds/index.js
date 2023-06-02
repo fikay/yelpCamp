@@ -29,9 +29,18 @@ const seedDb = async()=>{
            Title: "CampGround",
            Price: `${rand}`,
            Description: `${sample(campDescription)}`,
-           author: '647630dba624f05a578e511f',
+           author: "647630dba624f05a578e511f",
            Location: `${cities[rand].city},${cities[rand].state}`,
-           Image: `https://source.unsplash.com/collection/483251`,
+           Images: [
+             {
+               url: `https://res.cloudinary.com/dymv0qyhs/image/upload/v1685633806/yelpCamp/lbemgdlrj9wuoxadkvf5.avif`,
+               filename: "yelpCamp/lbemgdlrj9wuoxadkvf5",
+             },
+             {
+               url: `https://res.cloudinary.com/dymv0qyhs/image/upload/v1685633806/yelpCamp/ha2pbn06yk4xysbwpkgr.avif`,
+               filename: "yelpCamp/ha2pbn06yk4xysbwpkgr",
+             },
+           ],
          });
           await seeder.save()
     }

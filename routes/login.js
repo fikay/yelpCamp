@@ -20,7 +20,6 @@ router
     }),
     (req, res) => {
       req.flash("success", `Welcome Back ${req.user.username}`);
-      console.log(res.locals.returnTo);
       const redirectUrl = res.locals.returnTo || "/campground";
       res.redirect(redirectUrl);
     }

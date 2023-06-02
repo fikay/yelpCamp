@@ -10,7 +10,7 @@ const schema = joi.object({
   Description: joi
     .string()
     .required(),
-  Image: joi.string().required(),
+  Image: joi.array().items(joi.string().required()),
   Location: joi.string().alphanum().required(),
 });
 

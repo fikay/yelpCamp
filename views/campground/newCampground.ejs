@@ -1,10 +1,10 @@
 <% layout('./layouts/boilerPlate') %>
      <h1 class="text-center">Create New Campground</h1>
      <div class="col-6 offset-3">
-        <form class="needs-validation" action="/campground" method="post" novalidate> 
+        <form class="needs-validation" action="/campground" method="post" novalidate enctype="multipart/form-data"> 
         <div class="mb-3">
             <label class="fw-bold" for="name" class="form-label">Camp Name</label>
-            <input type="text" class="form-control" id="title" name="Name" required>
+            <input type="text" class="form-control" id="name" name="Name" required>
             <div class="invalid-feedback">
                 Name cannot be empty
             </div>
@@ -20,11 +20,15 @@
                 Location cannot be empty
             </div>
         </div>
-        <div class="mb-3">
-            <label class="fw-bold" for="image" class="form-label">Image url</label>
-            <input type="text" class="form-control" id="image" name="Image" required>
+        <div class="mb-3 custom-file">
+            <label class="fw-bold" for="image" class="form-label">Images</label>
+            <input type="file" class="form-control " id="image" name="Image" multiple required> 
              <div class="invalid-feedback">
                 Image cannot be empty
+            </div>
+
+            <div class="mt-2 preview-block d-flex flex-row">
+               <!-- <img id="preview"  src="" style="display: none;" alt="uploaded" width="100", height="100"> -->
             </div>
             <!-- <div class="valid-feedback">
                 Looks Good
@@ -58,3 +62,56 @@
     </form>
      </div>
     
+<script>
+    const parentNode = document.querySelector('.preview-block')
+    const images = document.querySelector('#image')
+    const imagePreview = document.querySelector('#preview')
+   $("#image").on("change", function() {
+        $('.preview-block').empty()
+     let arr =[]
+    Object.entries(images.files).forEach(([key,value])=>{
+          arr.push(URL.createObjectURL(value))
+    })
+    for(let ar of arr)
+    {
+        const box = document.createElement('img')
+        box.style.height ="50px"
+        box.style.width ="50px"
+        box.style.marginRight = "10px"
+        box.style.borderRadius = "10px"
+        box.src = ar
+        parentNode.appendChild(box)
+
+    }
+         arr = []
+});
+
+// $('#preview').on("click", function(){
+ 
+//     imagePreview.src = ''
+//      $('#preview').hide()
+//      const files = images.files
+//      let r = files
+//     //  const dataTransfer = new DataTransfer()
+//     //  dataTransfer.items.add(files)
+//     console.log( typeof  r) 
+//     console.log(  files) 
+//       for(let key in r)
+//       {
+//         if(key === '0')
+//         {
+//            //console.log(typeof files[key])
+//            console.log(r[key]) 
+//            delete r.key
+//             // console.log(`${key} : ${files[key]}`)
+//             // for(let ob in r)
+//             // {
+//             //     console.log(r[ob])
+//             // }
+//         }
+        
+//       }
+//        console.log(  r) 
+// })
+   
+</script>
