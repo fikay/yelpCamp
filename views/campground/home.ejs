@@ -7,15 +7,15 @@
         <% for( let camp of campgrounds ) { %>
             <div class="card border border-success mb-3 " >
                 <div id="container" class="row" style="height: 10rem;">
-                    <div class=" col-md-4 "style="height: 160px;">
+                    <div class="col-sm-4 col-md-4 "style="height: 160px;">
                          <img class=" h-100 img-fluid" src="<%=camp.Images[0].url%>">
                     </div>
-                    <div class=" col-md-4 ">
+                    <div class="col-sm-4 col-md-4 ">
                            <h5 class="card-title text-end me-3"><%= camp.Name %></h5>
                             <p class="card-text text-end me-3"><%= camp.Description %></p>
                             
                     </div>
-                    <div id ="box" class="col-md-4 d-flex align-items-center justify-content-end ">
+                    <div id ="box" class=" col-sm-4 col-md-4 d-flex align-items-center justify-content-end ">
                         <a  href="/campground/<%= camp._id %>" class="btn btn-primary m">Camp Details</a>
                     </div>
                 </div>

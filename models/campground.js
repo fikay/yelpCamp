@@ -10,7 +10,7 @@ const imageSchema = new Schema({
    
 })
 imageSchema.virtual('thumbnail').get(function(){
-  this.url.replace('/upload', '/upload/w_200')
+ return this.url.replace('/upload', '/upload/w_200')
 })
 const campGroundSchema = new Schema({
   Name: {
@@ -29,9 +29,20 @@ const campGroundSchema = new Schema({
     type: String,
     required: true,
   },
-  Location: {
-    type: String,
-    required: true,
+  Geometry: {
+    type: {
+      type: String,
+      enum:['Point'],
+      required: true,
+    },
+    coordinates:{
+      type:[Number],
+      required:true
+    }
+  },
+  Location:{
+    type:String,
+    required:true
   },
   author:{
     type:Schema.Types.ObjectId,

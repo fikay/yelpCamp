@@ -82,6 +82,7 @@
     </div>
     <div class="col-4  ">
         <div class="row  align-items-center">
+             <div id='map' style='width: 400px; height: 300px;'></div>
             <div class="col-md-12 ">
                     <% if (reviews.length === 0) { %>   
                         <div class="card border border-light text-center">
@@ -135,9 +136,20 @@
                 
             </div>
          </div>
+        
     </div>
 
 </div>
+
+<script>
+mapboxgl.accessToken ='<%-process.env.MAPBOX_TOKEN%>';
+const map = new mapboxgl.Map({
+container: 'map', // container ID
+style: 'mapbox://styles/mapbox/streets-v12', // style URL
+center: [-74.5, 40], // starting position [lng, lat]
+zoom: 9, // starting zoom
+});
+</script>
 
 <!-- <style>
     #icon{

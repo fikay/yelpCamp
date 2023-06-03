@@ -31,14 +31,11 @@ const seedDb = async()=>{
            Description: `${sample(campDescription)}`,
            author: "647630dba624f05a578e511f",
            Location: `${cities[rand].city},${cities[rand].state}`,
+
            Images: [
              {
-               url: `https://res.cloudinary.com/dymv0qyhs/image/upload/v1685633806/yelpCamp/lbemgdlrj9wuoxadkvf5.avif`,
-               filename: "yelpCamp/lbemgdlrj9wuoxadkvf5",
-             },
-             {
-               url: `https://res.cloudinary.com/dymv0qyhs/image/upload/v1685633806/yelpCamp/ha2pbn06yk4xysbwpkgr.avif`,
-               filename: "yelpCamp/ha2pbn06yk4xysbwpkgr",
+               url: `https://res.cloudinary.com/dymv0qyhs/image/upload/v1685798425/yelpCamp/nmqbtfb32spg4jyi1mxx.avif`,
+               filename: "yelpCamp/nmqbtfb32spg4jyi1mxx",
              },
            ],
          });

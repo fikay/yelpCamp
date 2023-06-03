@@ -2,6 +2,8 @@ const campGround = require("../models/campground");
 const appError = require("../utilities/appError");
 const {cloudinary} = require('../cloudinary/cloudinaryConfig')
 const { schema, reviewSchema } = require("../utilities/schemaValidator");
+const  mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding')
+const geocoder = mbxGeocoding({accessToken: process.env.MAPBOX_TOKEN})
 const control = module.exports
 
 //controller to display all campgrounds
@@ -96,22 +98,40 @@ control.createNewCamp = async (req, res, next) => {
     req.flash("error", `Form Validation error ${error.message}`);
     res.redirect("/campground/new");
   } else {
-    const newGround = new campGround(req.body);
-    newGround.author = req.user._id;
-    newGround.Images =req.files.map(f=>({url:f.path, filename:f.filename} ))
-    console.log(newGround)
-    await newGround
-      .save()
-      .then(async () => {
-        req.flash("success", "Campground created successfully");
-        res.redirect(`/campground/${newGround.id}`);
+    console.log(req.body);
+    
+    const location = geocoder
+      .forwardGeocode({
+        query: req.body.Location,
+        limit: 1,
       })
-      .catch((err) => {
-        req.flash("error", "Campground was not created ");
-        res.redirect("/campground");
-        //throw new appError('Missing fields', 401)
-        //next(err);
-      });
+      .send()
+      .then( async response =>{
+        const match = response.body;
+         const geo = match.features[0].geometry;
+         console.log(geo);
+         const newGround = new campGround(req.body);
+         newGround.Geometry = geo;
+         newGround.author = req.user._id;
+         newGround.Images = req.files.map((f) => ({
+           url: f.path,
+           filename: f.filename,
+         }));
+         console.log(newGround);
+          await newGround
+          .save()
+          .then(async () => {
+            req.flash("success", "Campground created successfully");
+            res.redirect(`/campground/${newGround.id}`);
+          })
+          .catch((err) => {
+            req.flash("error", `Campground was not created ${err}`);
+            res.redirect("/campground/new");
+            //throw new appError('Missing fields', 401)
+            //next(err);
+          });
+      })
+       
   }
 };
 
