@@ -1,5 +1,9 @@
 <% layout('./layouts/boilerPlate') %>
 <link rel="stylesheet" href="/stylesheets/stars.css">
+<script>
+   const  mapToken = "<%-process.env.MAPBOX_TOKEN%>";
+   const camp = <%-JSON.stringify(findCamp)%>;
+</script>
 <style>
     #card{
         overflow: hidden;
@@ -141,15 +145,7 @@
 
 </div>
 
-<script>
-mapboxgl.accessToken ='<%-process.env.MAPBOX_TOKEN%>';
-const map = new mapboxgl.Map({
-container: 'map', // container ID
-style: 'mapbox://styles/mapbox/streets-v12', // style URL
-center: [-74.5, 40], // starting position [lng, lat]
-zoom: 9, // starting zoom
-});
-</script>
+<script src="/javascripts/mapDisplay.js"></script>
 
 <!-- <style>
     #icon{

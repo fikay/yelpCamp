@@ -31,7 +31,10 @@ const seedDb = async()=>{
            Description: `${sample(campDescription)}`,
            author: "647630dba624f05a578e511f",
            Location: `${cities[rand].city},${cities[rand].state}`,
-
+           geometry: {
+             type: "Point",
+             coordinates: [cities[rand].longitude, cities[rand].latitude],
+           },
            Images: [
              {
                url: `https://res.cloudinary.com/dymv0qyhs/image/upload/v1685798425/yelpCamp/nmqbtfb32spg4jyi1mxx.avif`,

@@ -29,7 +29,7 @@ const campGroundSchema = new Schema({
     type: String,
     required: true,
   },
-  Geometry: {
+  geometry: {
     type: {
       type: String,
       enum:['Point'],
