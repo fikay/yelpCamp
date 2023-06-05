@@ -21,6 +21,7 @@ const flash = require('connect-flash')
 const passport = require("passport");
 const localStrategy = require('passport-local')
 const user = require('./models/user')
+const sanitize = require('express-mongo-sanitize')
 
 
 
@@ -41,6 +42,7 @@ app.set('views', path.join(__dirname,'views'))
 app.set('view engine','ejs')
 
 app.use(express.static(path.join(__dirname,'public')))
+app.use(express.static(path.join(__dirname, "Images")));
 
 //Middleware for responsebody
 app.use(express.urlencoded({ extended: true }));
@@ -50,6 +52,8 @@ app.use(methodOverride('_method'))
 
 // using morgan middleware
 app.use(morgan('tiny'))
+
+app.use(sanitize())
 
 //middleware for sessions
 const sessionConfig = {

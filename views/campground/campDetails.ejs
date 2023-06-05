@@ -86,15 +86,15 @@
     </div>
     <div class="col-4  ">
         <div class="row  align-items-center">
-             <div id='map' style='width: 400px; height: 300px;'></div>
+             <div id='map' style='width: 400px; height: 300px; margin-bottom: 10px;'></div>
             <div class="col-md-12 ">
                     <% if (reviews.length === 0) { %>   
-                        <div class="card border border-light text-center">
+                        <div class="card border border-light text-start">
                             <p class="fs-3">NO REVIEWS</p>
                         </div>
                     <% } else { %>
                     <% for( let rev of  reviews) { %>
-                        <div class="card border mb-2 rounded-4">
+                        <div class="card border mb-2 rounded-4" >
                             <div>
                                  <p class="text-start mx-2  card-title ">By <%= rev.author.username %></p>
                             </div>

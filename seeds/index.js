@@ -21,7 +21,7 @@ mongoose
 
 const seedDb = async()=>{
     await campGround.deleteMany({});
-    for(let i =0; i<50; i++)
+    for(let i =0; i<200; i++)
     {
         const rand = Math.floor(Math.random() * 1000);
          const seeder = new campGround({

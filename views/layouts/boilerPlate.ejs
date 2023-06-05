@@ -14,11 +14,15 @@
  <nav>
   <%-include('../partials/navBar.ejs')%>
  </nav>
- <div class="container-fluid mt-3">
-     <%- include('../partials/flash.ejs') %>
- </div>
-   <main class="container-fluid mt-3">
-        <%-body %>
+ 
+   <main id="mainContainer" class="container-fluid d-flex flex-column px-0 align-items-center justify-content-center flex-grow-1 ">
+        <div class="container-fluid">
+            <%- include('../partials/flash.ejs') %>
+        </div>
+        <div class="container-fluid align-self-center">
+            <%-body %>
+        </div>
+        
    </main>
 
     <%- include('../partials/footer.ejs') %>
@@ -33,10 +37,16 @@
     body{
         min-height: 100vh;
     }
+    #mainContainer{
+        background-image: url("/camp.avif") ;
+        background-size: cover;
+        background-position: center;
+    }
 
     @media (max-width:1019px){
         #d-flex{
 flex-direction: row;
         }
     }
+
 </style>
